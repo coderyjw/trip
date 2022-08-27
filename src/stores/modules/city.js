@@ -6,13 +6,13 @@ export const useCityStore = defineStore("city", {
     return {
       allCities: {},
       currentCity: {
-        cityName: "杭州",
-        cityId: 7,
+        cityId: 45,
+        cityName: "广州",
         gangAoTai: false,
         hot: false,
-        latitude: "30.279",
-        longitude: "120.162",
-        pinYin: "hangzhou",
+        latitude: "23.1354",
+        longitude: "113.271",
+        pinYin: "guangzhou",
       },
     };
   },

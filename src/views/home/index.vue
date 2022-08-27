@@ -19,6 +19,7 @@ import { useHomeStore } from "@/stores/modules/home";
 const homeStore = useHomeStore();
 homeStore.fetchHotSuggestData();
 homeStore.fetchCategoriesData();
+homeStore.fetchHouselistData();
 </script>
 
 <style lang="less" scoped>
