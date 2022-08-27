@@ -3,3 +3,7 @@ import dayjs from "dayjs";
 export function formatMonthDay(date) {
   return dayjs(date).format("MM月DD日");
 }
+
+export function getDiffDate(startDate, endDate, unit = "day") {
+  return dayjs(endDate).diff(startDate, unit);
+}

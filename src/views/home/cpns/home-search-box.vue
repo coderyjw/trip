@@ -15,7 +15,7 @@
         <span class="tip">入住</span>
         <span class="time">{{ startDate }}</span>
       </div>
-      <span class="stay">共一晚</span>
+      <span class="stay">共{{ stayCount }}晚</span>
       <div class="end">
         <span class="tip">离店</span>
         <span class="time">{{ endDate }}</span>
@@ -27,16 +27,17 @@
       @confirm="onConfirm"
       color="#ff9854"
       :round="false"
+      :formatter="formatter"
     />
   </div>
 </template>
 
 <script setup>
 import { useRouter } from "vue-router";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import useCityStore from "@/stores/modules/city";
 import { storeToRefs } from "pinia";
-import { formatMonthDay } from "@/utils/format_date";
+import { formatMonthDay, getDiffDate } from "@/utils/format_date";
 import dayjs from "dayjs";
 
 const router = useRouter();
@@ -57,15 +58,28 @@ const positionClick = () => {
 const cityStore = useCityStore();
 const { currentCity } = storeToRefs(cityStore);
 
-const startDate = ref(formatMonthDay(dayjs()));
-const endDate = ref(formatMonthDay(dayjs().add(1, "day")));
+const nowDate = dayjs();
+const newDate = dayjs().add(1, "day");
+const startDate = ref(formatMonthDay(nowDate));
+const endDate = ref(formatMonthDay(newDate));
+const stayCount = ref(getDiffDate(nowDate, newDate));
 
 const showCalendar = ref(false);
+
+const formatter = (day) => {
+  if (day.type === "start") {
+    day.bottomInfo = "入住";
+  } else if (day.type === "end") {
+    day.bottomInfo = "离店";
+  }
+  return day;
+};
 const onConfirm = (value) => {
   const selectStartDate = value[0];
   const selectEndDate = value[1];
   startDate.value = formatMonthDay(dayjs(selectStartDate));
   endDate.value = formatMonthDay(dayjs(selectEndDate));
+  stayCount.value = getDiffDate(selectStartDate, selectEndDate);
   showCalendar.value = false;
 };
 </script>
