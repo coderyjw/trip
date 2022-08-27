@@ -5,6 +5,15 @@ export const useCityStore = defineStore("city", {
   state() {
     return {
       allCities: {},
+      currentCity: {
+        cityName: "杭州",
+        cityId: 7,
+        gangAoTai: false,
+        hot: false,
+        latitude: "30.279",
+        longitude: "120.162",
+        pinYin: "hangzhou",
+      },
     };
   },
   actions: {

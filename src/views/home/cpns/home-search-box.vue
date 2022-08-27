@@ -1,7 +1,7 @@
 <template>
   <div class="home-search-box">
     <div class="location">
-      <div class="city" @click="cityClick">杭州</div>
+      <div class="city" @click="cityClick">{{ currentCity.cityName }}</div>
       <div class="position" @click="positionClick">
         <span class="text">我的位置</span>
         <van-icon name="aim" />
@@ -12,7 +12,8 @@
 
 <script setup>
 import { useRouter } from "vue-router";
-
+import useCityStore from "@/stores/modules/city";
+import { storeToRefs } from "pinia";
 
 const router = useRouter();
 const cityClick = () => {
@@ -29,6 +30,8 @@ const positionClick = () => {
     }
   );
 };
+const cityStore = useCityStore();
+const { currentCity } = storeToRefs(cityStore);
 </script>
 
 <style lang="less" scoped>
