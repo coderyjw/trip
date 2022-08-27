@@ -1,5 +1,5 @@
 <template>
-  <div class="city-group">
+  <div class="city-group ">
     <van-index-bar highlight-color="#ff9854" :index-list="indexList">
       <van-index-anchor index="热门" />
       <div class="list">

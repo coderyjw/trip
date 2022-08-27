@@ -31,11 +31,12 @@
     <van-calendar
       v-model:show="showCalendar"
       type="range"
+      @confirm="onConfirm"
       color="#ff9854"
       :round="false"
-      :show-confirm="false"
-      @confirm="onConfirm"
+      :formatter="formatter"
     />
+
     <!-- 价格/人数选择 -->
     <div class="section price-counter bottom-gray-line">
       <div class="start">价格不限</div>
@@ -59,14 +60,10 @@
       </template>
     </div>
 
-    <van-calendar
-      v-model:show="showCalendar"
-      type="range"
-      @confirm="onConfirm"
-      color="#ff9854"
-      :round="false"
-      :formatter="formatter"
-    />
+    <!-- 搜索按钮 -->
+    <div class="section search-btn">
+      <div class="btn" @click="searchBtnClick">开始搜索</div>
+    </div>
   </div>
 </template>
 
@@ -87,11 +84,13 @@ const cityClick = () => {
 const positionClick = () => {
   navigator.geolocation.getCurrentPosition(
     (res) => {
-      console.log({ res });
+      console.log("当前经纬度：", res.coords.longitude, res.coords.latitude);
     },
-    (err) => {
-      console.log({ err });
-    }
+    (error) => {
+      alert(error.code + ": " + error.message);
+      console.log(error.code + ": " + error.message);
+    },
+    { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
   );
 };
 const cityStore = useCityStore();
@@ -124,6 +123,18 @@ const onConfirm = (value) => {
 
 const homeStore = useHomeStore();
 const { hotSuggests } = storeToRefs(homeStore);
+
+// 开始搜索
+const searchBtnClick = () => {
+  router.push({
+    path: "/search",
+    query: {
+      startDate: startDate.value,
+      endDate: endDate.value,
+      currentCity: currentCity.value.cityName,
+    },
+  });
+};
 </script>
 
 <style lang="less" scoped>

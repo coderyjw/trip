@@ -10,6 +10,10 @@ const routes = [
     path: "/city",
     component: () => import("@/views/city/index.vue"),
   },
+  {
+    path: "/search",
+    component: () => import("@/views/search/search.vue"),
+  },
 ];
 
 const router = createRouter({
