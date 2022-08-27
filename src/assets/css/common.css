@@ -1,5 +1,7 @@
 :root {
   --primary-color: #ff9854;
+  --line-color: #faf8f9;
+  --theme-linear-gradient: linear-gradient(90deg, #fa8c1d, #fcaf3f);
 
   /* 全局修改 */
   --van-search-left-icon-color: var(--primary-color) !important;
@@ -17,4 +19,8 @@ body {
   overflow-y: auto;
   background-color: #fff;
   position: relative;
+}
+
+.bottom-gray-line {
+  border-bottom: 1px solid var(--line-color);
 }
