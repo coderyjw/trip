@@ -10,7 +10,7 @@
     </div>
 
     <!-- 日期范围 -->
-    <div class="date-range">
+    <div class="date-range" @click="showCalendar = true">
       <div class="start">
         <span class="tip">入住</span>
         <span class="time">{{ startDate }}</span>
@@ -21,6 +21,13 @@
         <span class="time">{{ endDate }}</span>
       </div>
     </div>
+    <van-calendar
+      v-model:show="showCalendar"
+      type="range"
+      @confirm="onConfirm"
+      color="#ff9854"
+      :round="false"
+    />
   </div>
 </template>
 
@@ -52,10 +59,20 @@ const { currentCity } = storeToRefs(cityStore);
 
 const startDate = ref(formatMonthDay(dayjs()));
 const endDate = ref(formatMonthDay(dayjs().add(1, "day")));
+
+const showCalendar = ref(false);
+const onConfirm = (value) => {
+  const selectStartDate = value[0];
+  const selectEndDate = value[1];
+  startDate.value = formatMonthDay(dayjs(selectStartDate));
+  endDate.value = formatMonthDay(dayjs(selectEndDate));
+  showCalendar.value = false;
+};
 </script>
 
 <style lang="less" scoped>
 .home-search-box {
+  --van-calendar-popup-height: 100%;
   .location {
     height: 46px;
     align-items: center;
