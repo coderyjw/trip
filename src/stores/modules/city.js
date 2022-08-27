@@ -1,12 +1,18 @@
+import { getCityAll } from "@/service";
 import { defineStore } from "pinia";
 
 export const useCityStore = defineStore("city", {
   state() {
     return {
-      cities: [],
+      allCities: {},
     };
   },
-  actions: {},
+  actions: {
+    async fetchAllCitiesData() {
+      const res = await getCityAll();
+      this.allCities = res.data;
+    },
+  },
 });
 
 export default useCityStore;
