@@ -6,6 +6,7 @@
     </div>
     <home-search-box />
     <home-categories />
+    <home-content />
   </div>
 </template>
 
@@ -13,10 +14,12 @@
 import HomeNavBar from "./cpns/home-nav-bar.vue";
 import HomeSearchBox from "./cpns/home-search-box.vue";
 import HomeCategories from "./cpns/home-categories.vue";
+import HomeContent from "./cpns/home-content.vue";
 import { getAssetURL } from "@/utils/load_assets.js";
 import { useHomeStore } from "@/stores/modules/home";
 
 const homeStore = useHomeStore();
+// 发送网络请求
 homeStore.fetchHotSuggestData();
 homeStore.fetchCategoriesData();
 homeStore.fetchHouselistData();
