@@ -1,13 +1,12 @@
-<script setup></script>
-
 <template>
   <div id="app">
     <router-view />
-    <router-link to="/home">首页</router-link>
-    <router-link to="/favor">收藏</router-link>
-    <router-link to="/order">订单</router-link>
-    <router-link to="/message">消息</router-link>
+    <tab-bar />
   </div>
 </template>
+
+<script setup>
+import TabBar from "@/components/tab-bar/index.vue";
+</script>
 
 <style scoped></style>
