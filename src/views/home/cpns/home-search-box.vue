@@ -17,14 +17,14 @@
       <div class="start">
         <div class="date">
           <span class="tip">入住</span>
-          <span class="time">{{ startDate }}</span>
+          <span class="time">{{ startDateStr }}</span>
         </div>
         <div class="stay">共{{ stayCount }}晚</div>
       </div>
       <div class="end">
         <div class="date">
           <span class="tip">离店</span>
-          <span class="time">{{ endDate }}</span>
+          <span class="time">{{ endDateStr }}</span>
         </div>
       </div>
     </div>
@@ -72,9 +72,10 @@ import { useRouter } from "vue-router";
 import { ref, computed } from "vue";
 import useCityStore from "@/stores/modules/city";
 import { storeToRefs } from "pinia";
-import { formatMonthDay, getDiffDate } from "@/utils/format_date";
+import { formatMonthDay, getDiffDays  } from "@/utils/format_date";
 import useHomeStore from "@/stores/modules/home";
 import dayjs from "dayjs";
+import useMainStore from "@/stores/modules/main";
 
 const router = useRouter();
 const cityClick = () => {
@@ -96,14 +97,26 @@ const positionClick = () => {
 const cityStore = useCityStore();
 const { currentCity } = storeToRefs(cityStore);
 
-const nowDate = dayjs();
-const newDate = dayjs().add(1, "day");
-const startDate = ref(formatMonthDay(nowDate));
-const endDate = ref(formatMonthDay(newDate));
-const stayCount = ref(getDiffDate(nowDate, newDate));
+// 日期范围的处理
+const mainStore = useMainStore();
+const { startDate, endDate } = storeToRefs(mainStore);
+
+const startDateStr = computed(() => formatMonthDay(startDate.value));
+const endDateStr = computed(() => formatMonthDay(endDate.value));
+const stayCount = ref(getDiffDays(startDate.value, endDate.value));
 
 const showCalendar = ref(false);
+const onConfirm = (value) => {
+  // 1.设置日期
+  const selectStartDate = value[0];
+  const selectEndDate = value[1];
+  mainStore.startDate = selectStartDate;
+  mainStore.endDate = selectEndDate;
+  stayCount.value = getDiffDays(selectStartDate, selectEndDate);
 
+  // 2.隐藏日历
+  showCalendar.value = false;
+};
 const formatter = (day) => {
   if (day.type === "start") {
     day.bottomInfo = "入住";
@@ -111,14 +124,6 @@ const formatter = (day) => {
     day.bottomInfo = "离店";
   }
   return day;
-};
-const onConfirm = (value) => {
-  const selectStartDate = value[0];
-  const selectEndDate = value[1];
-  startDate.value = formatMonthDay(dayjs(selectStartDate));
-  endDate.value = formatMonthDay(dayjs(selectEndDate));
-  stayCount.value = getDiffDate(selectStartDate, selectEndDate);
-  showCalendar.value = false;
 };
 
 const homeStore = useHomeStore();
