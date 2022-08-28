@@ -1,6 +1,6 @@
 <template>
   <div class="favor">
-    <h2>favor</h2>
+    <h2>页面建设中...</h2>
   </div>
 </template>
 
