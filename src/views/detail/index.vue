@@ -57,7 +57,7 @@
 
 <script setup>
 import { useRouter, useRoute } from "vue-router";
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { getDetailInfos } from "@/service";
 
 import TabControl from "@/components/tab-control/tab-control.vue";
@@ -91,7 +91,7 @@ const onClickLeft = () => {
 const detailRef = ref();
 const { scrollTop } = useScroll(detailRef);
 const showTabControl = computed(() => {
-  return scrollTop.value >= 300;
+  return scrollTop.value >= 262;
 });
 
 const sectionEls = ref({});
@@ -103,6 +103,48 @@ const getSectionRef = (value) => {
   const name = value.$el.getAttribute("name");
   sectionEls.value[name] = value.$el;
 };
+
+let isClick = false;
+let currentDistance = -1;
+const tabClick = (index) => {
+  const key = Object.keys(sectionEls.value)[index];
+  const el = sectionEls.value[key];
+  let distance = el.offsetTop;
+  distance = distance - 44;
+
+  isClick = true;
+  currentDistance = distance;
+
+  detailRef.value.scrollTo({
+    top: distance,
+    behavior: "smooth",
+  });
+};
+
+// 页面滚动, 滚动时匹配对应的tabControll的index
+const tabControlRef = ref();
+watch(scrollTop, (newValue) => {
+  console.log(newValue, currentDistance, isClick);
+  if (newValue === currentDistance) {
+    isClick = false;
+  }
+  if (isClick) return;
+
+  // 1.获取所有的区域的offsetTops
+  const els = Object.values(sectionEls.value);
+  const values = els.map((el) => el.offsetTop);
+
+  // 2.根据newValue去匹配想要索引
+  let index = values.length - 1;
+  for (let i = 0; i < values.length; i++) {
+    if (values[i] > newValue + 44) {
+      index = i - 1;
+      break;
+    }
+  }
+  // console.log(index)
+  tabControlRef.value?.setCurrentIndex(index);
+});
 </script>
 
 <style lang="less" scoped>
@@ -121,6 +163,7 @@ const getSectionRef = (value) => {
     align-items: center;
     justify-content: center;
     height: 120px;
+    margin-bottom: 500px;
 
     img {
       width: 123px;
