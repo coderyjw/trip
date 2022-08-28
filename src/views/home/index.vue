@@ -52,7 +52,11 @@ onActivated(() => {
   });
 });
 </script>
-
+<script>
+export default {
+  name: "home",
+};
+</script>
 <style lang="less" scoped>
 .home {
   --van-font-weight-bold: 700;
