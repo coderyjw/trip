@@ -1,5 +1,12 @@
 <template>
-  <div class="detail top-page">
+  <div class="detail top-page" ref="detailRef">
+    <tab-control
+      v-if="showTabControl"
+      class="tabs"
+      :titles="names"
+      @tabItemClick="tabClick"
+      ref="tabControlRef"
+    />
     <van-nav-bar
       title="房屋详情"
       left-text="旅途"
@@ -53,6 +60,7 @@ import { useRouter, useRoute } from "vue-router";
 import { ref, computed } from "vue";
 import { getDetailInfos } from "@/service";
 
+import TabControl from "@/components/tab-control/tab-control.vue";
 import DetailSwipe from "./cpns/detail_01-swipe.vue";
 import DetailInfos from "./cpns/detail_02-infos.vue";
 import DetailFacility from "./cpns/detail_03-facility.vue";
@@ -61,6 +69,7 @@ import DetailComment from "./cpns/detail_05-comment.vue";
 import DetailNotice from "./cpns/detail_06-notice.vue";
 import DetailMap from "./cpns/detail_07-map.vue";
 import DetailIntro from "./cpns/detail_08-intro.vue";
+import useScroll from "@/hooks/useScroll";
 
 const router = useRouter();
 const route = useRoute();
@@ -77,6 +86,13 @@ getDetailInfos(houseId).then((res) => {
 const onClickLeft = () => {
   router.back();
 };
+
+// tabControl相关的操作
+const detailRef = ref();
+const { scrollTop } = useScroll(detailRef);
+const showTabControl = computed(() => {
+  return scrollTop.value >= 300;
+});
 
 const sectionEls = ref({});
 const names = computed(() => {
